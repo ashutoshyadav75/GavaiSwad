@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Reports | Gavai Swad</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/admin-reports.css}">
+</head>
+
+<body>
+
+    <main class="reports-container">
+
+        <!-- Page Header -->
+        <section class="page-header">
+
+            <div class="header-content">
+                <span class="eyebrow">ADMINISTRATION / ANALYTICS</span>
+                <h1>Sales & Order Reports</h1>
+                <p>Monitor your store performance and sales overview.</p>
+            </div>
+
+            <a th:href="@{/admin/dashboard}" class="back-btn">
+                <i class="bi bi-arrow-left"></i>
+                Back to Dashboard
+            </a>
+
+        </section>
+
+        <!-- Report Summary -->
+        <section class="report-grid">
+
+            <div class="report-card orders-card">
+                <div class="card-top">
+                    <div class="report-icon">
+                        <i class="bi bi-bag-check"></i>
+                    </div>
+                    <span class="card-category">ORDERS</span>
+                </div>
+
+                <h3>Total Orders</h3>
+
+                <div class="report-value"
+                     th:text="${totalOrders}">0</div>
+
+                <p class="report-note">All orders received</p>
+            </div>
+
+            <div class="report-card pending-card">
+                <div class="card-top">
+                    <div class="report-icon">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+                    <span class="card-category">PENDING</span>
+                </div>
+
+                <h3>Pending Orders</h3>
+
+                <div class="report-value"
+                     th:text="${pendingOrders}">0</div>
+
+                <p class="report-note">Orders awaiting processing</p>
+            </div>
+
+            <div class="report-card delivered-card">
+                <div class="card-top">
+                    <div class="report-icon">
+                        <i class="bi bi-truck"></i>
+                    </div>
+                    <span class="card-category">DELIVERED</span>
+                </div>
+
+                <h3>Delivered Orders</h3>
+
+                <div class="report-value"
+                     th:text="${deliveredOrders}">0</div>
+
+                <p class="report-note">Successfully delivered</p>
+            </div>
+
+            <div class="report-card revenue-card">
+                <div class="card-top">
+                    <div class="report-icon">
+                        <i class="bi bi-currency-rupee"></i>
+                    </div>
+                    <span class="card-category">REVENUE</span>
+                </div>
+
+                <h3>Total Revenue</h3>
+
+                <div class="report-value currency-value">
+                    ₹<span th:text="${#numbers.formatDecimal(totalRevenue, 1, 2)}">
+                        0.00
+                    </span>
+                </div>
+
+                <p class="report-note">Excluding cancelled orders</p>
+            </div>
+
+            <div class="report-card monthly-card">
+                <div class="card-top">
+                    <div class="report-icon">
+                        <i class="bi bi-calendar-month"></i>
+                    </div>
+                    <span class="card-category">MONTHLY</span>
+                </div>
+
+                <h3>Current Month Sales</h3>
+
+                <div class="report-value currency-value">
+                    ₹<span th:text="${#numbers.formatDecimal(monthlySales, 1, 2)}">
+                        0.00
+                    </span>
+                </div>
+
+                <p class="report-note">Sales for the current month</p>
+            </div>
+
+        </section>
+
+        <!-- Report Information -->
+        <section class="report-info">
+            <i class="bi bi-info-circle"></i>
+            <p>
+                These reports provide an overview of your store's
+                order activity and sales performance.
+            </p>
+        </section>
+
+        <!-- Footer -->
+        <footer class="reports-footer">
+            &copy; 2026 Gavai Swad. Admin Reports.
+        </footer>
+
+    </main>
+
+</body>
+</html>

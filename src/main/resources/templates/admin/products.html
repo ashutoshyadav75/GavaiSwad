@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products | Gavai Swad</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7f2;
+            color: #263526;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-container {
+            padding: 30px;
+            flex: 1;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #28633b;
+            font-size: 21px;
+        }
+
+        .message,
+        .error {
+            padding: 12px 15px;
+            margin-bottom: 18px;
+            border-radius: 6px;
+        }
+
+        .message {
+            background: #e0f5e5;
+            color: #216b35;
+        }
+
+        .error {
+            background: #ffe7e7;
+            color: #a52222;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccd5cc;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #28633b;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 95px;
+        }
+
+        .submit-btn {
+            margin-top: 22px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            background: #28633b;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #1d4c2c;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 14px;
+            border-bottom: 1px solid #e6e9e4;
+        }
+
+        th {
+            background: #edf4ed;
+            color: #285c36;
+            font-size: 13px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .active {
+            background: #e0f5e5;
+            color: #216b35;
+        }
+
+        .inactive {
+            background: #ffe7e7;
+            color: #a52222;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+		
+		.edit-btn,
+		.delete-btn {
+		    display: inline-block;
+		    padding: 8px 12px;
+		    border: none;
+		    border-radius: 5px;
+		    color: white;
+		    text-decoration: none;
+		    font-size: 12px;
+		    cursor: pointer;
+		    margin: 3px;
+		}
+
+		.edit-btn {
+		    background: #28633b;
+		}
+
+		.edit-btn:hover {
+		    background: #1d4c2c;
+		}
+
+		.delete-btn {
+		    background: #dc3545;
+		}
+
+		.delete-btn:hover {
+		    background: #b02a37;
+		}
+
+        @media (max-width: 768px) {
+            .admin-layout {
+                flex-direction: column;
+            }
+
+            .content-container {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+            .card {
+                padding: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+    <!-- Reusable Sidebar -->
+    <div th:replace="~{fragments/admin-sidebar :: adminSidebar}"></div>
+
+    <div class="main-content">
+
+        <!-- Reusable Header -->
+        <div th:replace="~{fragments/admin-header :: adminHeader('Manage Products')}"></div>
+
+        <main class="content-container">
+
+            <!-- Success and Error Messages -->
+            <div th:if="${message}"
+                 class="message"
+                 th:text="${message}">
+            </div>
+
+            <div th:if="${error}"
+                 class="error"
+                 th:text="${error}">
+            </div>
+
+            <!-- Add Product Section -->
+            <section class="card">
+
+                <h2>Add New Product</h2>
+
+                <form th:action="@{/admin/products/save}" method="post">
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label for="name">Product Name *</label>
+                            <input type="text"
+                                   id="name"
+                                   name="name"
+                                   placeholder="e.g. Homemade Mango Pickle"
+                                   maxlength="150"
+                                   required>
+                        </div>
+
+                        <div class="field">
+                            <label for="category">Category *</label>
+
+                            <select id="category" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="Achar">Achar</option>
+                                <option value="Papad">Papad</option>
+                                <option value="Masale">Masale</option>
+                                <option value="Ghee">Ghee</option>
+                                <option value="Namkeen">Namkeen</option>
+                                <option value="Homemade Foods">Homemade Foods</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="price">Price (₹) *</label>
+                            <input type="number"
+                                   id="price"
+                                   name="price"
+                                   min="0.01"
+                                   step="0.01"
+                                   placeholder="199.00"
+                                   required>
+                        </div>
+
+                        <div class="field">
+                            <label for="stock">Stock Quantity *</label>
+                            <input type="number"
+                                   id="stock"
+                                   name="stock"
+                                   min="0"
+                                   placeholder="50"
+                                   required>
+                        </div>
+
+                        <div class="field full">
+                            <label for="imageUrl">Product Image URL</label>
+                            <input type="url"
+                                   id="imageUrl"
+                                   name="imageUrl"
+                                   maxlength="500"
+                                   placeholder="https://example.com/product.jpg">
+                        </div>
+
+                        <div class="field full">
+                            <label for="description">Description</label>
+                            <textarea id="description"
+                                      name="description"
+                                      maxlength="2000"
+                                      placeholder="Describe the product..."></textarea>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        Add Product
+                    </button>
+
+                </form>
+
+            </section>
+
+            <!-- All Products Section -->
+            <section class="card">
+
+                <h2>All Products</h2>
+
+                <div class="table-wrapper">
+
+                    <table>
+
+						<thead>
+						<tr>
+						    <th>ID</th>
+						    <th>Product Name</th>
+						    <th>Category</th>
+						    <th>Price</th>
+						    <th>Stock</th>
+						    <th>Status</th>
+						    <th>Actions</th>
+						</tr>
+						</thead>
+
+						<tbody>
+
+						<tr th:each="product : ${products}">
+
+						    <td th:text="${product.id}"></td>
+						    <td th:text="${product.name}"></td>
+						    <td th:text="${product.category}"></td>
+
+						    <td>
+						        ₹<span th:text="${product.price}"></span>
+						    </td>
+
+						    <td th:text="${product.stock}"></td>
+
+						    <td>
+						        <span class="status"
+						              th:classappend="${product.active ? ' active' : ' inactive'}"
+						              th:text="${product.active ? 'Active' : 'Inactive'}">
+						        </span>
+						    </td>
+
+						    <td>
+						        <a th:if="${product.active}"
+						           th:href="@{/admin/products/edit/{id}(id=${product.id})}"
+						           class="edit-btn">
+						            Edit
+						        </a>
+
+						        <form th:if="${product.active}"
+						              th:action="@{/admin/products/delete/{id}(id=${product.id})}"
+						              method="post"
+						              style="display:inline;"
+						              onsubmit="return confirm('Are you sure you want to deactivate this product?');">
+
+						            <button type="submit" class="delete-btn">
+						                Delete
+						            </button>
+						        </form>
+
+						    </td>
+
+						</tr>
+
+						<tr th:if="${#lists.isEmpty(products)}">
+						    <td colspan="7" class="empty">
+						        No products added yet.
+						    </td>
+						</tr>
+
+						</tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <!-- Reusable Footer -->
+        <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

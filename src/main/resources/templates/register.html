@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: head(~{::title}, '/css/register.css')}">
+    <title>Register | Gavai Swad</title>
+</head>
+
+<body>
+
+    <!-- Common Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="register-page">
+
+        <section class="register-container">
+
+            <div class="register-brand">
+                <span class="register-eyebrow">WELCOME TO GAVAI SWAD</span>
+                <h1>Join Our Family</h1>
+                <p>Authentic Taste, Delivered to You</p>
+            </div>
+
+            <div class="register-heading">
+                <h2>Create Your Account</h2>
+                <p>Enter your details to get started.</p>
+            </div>
+
+            <!-- Error Message -->
+            <div class="register-alert error-message"
+                 th:if="${error}"
+                 th:text="${error}">
+            </div>
+
+            <!-- Success Message -->
+            <div class="register-alert success-message"
+                 th:if="${message}"
+                 th:text="${message}">
+            </div>
+
+            <!-- Registration Form -->
+            <form th:action="@{/register}" method="post">
+
+                <div class="register-form-group">
+                    <label for="fullName">Full Name *</label>
+                    <div class="register-input">
+                        <i class="bi bi-person"></i>
+                        <input type="text"
+                               id="fullName"
+                               name="fullName"
+                               placeholder="Enter your full name"
+                               maxlength="100"
+                               autocomplete="name"
+                               required>
+                    </div>
+                </div>
+
+                <div class="register-form-group">
+                    <label for="email">Email Address *</label>
+                    <div class="register-input">
+                        <i class="bi bi-envelope"></i>
+                        <input type="email"
+                               id="email"
+                               name="email"
+                               placeholder="Enter your email"
+                               maxlength="150"
+                               autocomplete="email"
+                               required>
+                    </div>
+                </div>
+
+                <div class="register-form-group">
+                    <label for="phone">Mobile Number *</label>
+                    <div class="register-input">
+                        <i class="bi bi-telephone"></i>
+                        <input type="tel"
+                               id="phone"
+                               name="phone"
+                               placeholder="Enter your mobile number"
+                               maxlength="15"
+                               autocomplete="tel"
+                               required>
+                    </div>
+                </div>
+
+                <div class="register-form-group">
+                    <label for="password">Password *</label>
+                    <div class="register-input">
+                        <i class="bi bi-lock"></i>
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               placeholder="Create a password"
+                               minlength="8"
+                               autocomplete="new-password"
+                               required>
+                    </div>
+                </div>
+
+                <!-- CAPTCHA -->
+                <div class="captcha-box">
+                    <div class="captcha-heading">
+                        <i class="bi bi-shield-lock"></i>
+                        Security Verification
+                    </div>
+
+                    <p class="captcha-question">
+                        Solve this simple question:
+                        <strong th:text="${captchaQuestion}">3 + 4 = ?</strong>
+                    </p>
+
+                    <input type="number"
+                           name="captchaAnswer"
+                           placeholder="Enter CAPTCHA answer"
+                           aria-label="CAPTCHA answer"
+                           required>
+                </div>
+
+                <button type="submit" class="register-btn">
+                    Create Account
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+
+                <div class="approval-note">
+                    <i class="bi bi-info-circle"></i>
+                    Your account will require admin approval before you can log in.
+                </div>
+
+            </form>
+
+            <div class="register-login">
+                Already have an account?
+                <a th:href="@{/login}">Login here</a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Common Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <!-- Common Scripts -->
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+
+</body>
+</html>

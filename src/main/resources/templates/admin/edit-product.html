@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product | Gavai Swad</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7f2;
+            color: #263526;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-container {
+            padding: 30px;
+            flex: 1;
+        }
+
+        .card {
+            max-width: 850px;
+            margin: auto;
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.06);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #28633b;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccd5cc;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #28633b;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        button, .cancel-btn {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .save-btn {
+            background: #28633b;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #1d4c2c;
+        }
+
+        .cancel-btn {
+            background: #e5e7eb;
+            color: #333;
+        }
+
+        @media(max-width: 768px) {
+            .admin-layout {
+                flex-direction: column;
+            }
+
+            .content-container {
+                padding: 15px;
+            }
+        }
+
+        @media(max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+    <!-- Reusable Sidebar -->
+    <div th:replace="~{fragments/admin-sidebar :: adminSidebar}"></div>
+
+    <div class="main-content">
+
+        <!-- Reusable Header -->
+        <div th:replace="~{fragments/admin-header :: adminHeader('Edit Product')}"></div>
+
+        <main class="content-container">
+
+            <section class="card">
+
+                <h2>Update Product Details</h2>
+
+                <form th:action="@{/admin/products/update/{id}(id=${product.id})}"
+                      method="post">
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label for="name">Product Name *</label>
+                            <input type="text"
+                                   id="name"
+                                   name="name"
+                                   th:value="${product.name}"
+                                   maxlength="150"
+                                   required>
+                        </div>
+
+                        <div class="field">
+                            <label for="category">Category *</label>
+
+                            <select id="category" name="category" required>
+
+                                <option value="">Select Category</option>
+
+                                <option value="Achar"
+                                        th:selected="${product.category == 'Achar'}">
+                                    Achar
+                                </option>
+
+                                <option value="Papad"
+                                        th:selected="${product.category == 'Papad'}">
+                                    Papad
+                                </option>
+
+                                <option value="Masale"
+                                        th:selected="${product.category == 'Masale'}">
+                                    Masale
+                                </option>
+
+                                <option value="Ghee"
+                                        th:selected="${product.category == 'Ghee'}">
+                                    Ghee
+                                </option>
+
+                                <option value="Namkeen"
+                                        th:selected="${product.category == 'Namkeen'}">
+                                    Namkeen
+                                </option>
+
+                                <option value="Homemade Foods"
+                                        th:selected="${product.category == 'Homemade Foods'}">
+                                    Homemade Foods
+                                </option>
+
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="price">Price (₹) *</label>
+                            <input type="number"
+                                   id="price"
+                                   name="price"
+                                   th:value="${product.price}"
+                                   min="0.01"
+                                   step="0.01"
+                                   required>
+                        </div>
+
+                        <div class="field">
+                            <label for="stock">Stock Quantity *</label>
+                            <input type="number"
+                                   id="stock"
+                                   name="stock"
+                                   th:value="${product.stock}"
+                                   min="0"
+                                   required>
+                        </div>
+
+                        <div class="field full">
+                            <label for="imageUrl">Product Image URL</label>
+                            <input type="url"
+                                   id="imageUrl"
+                                   name="imageUrl"
+                                   th:value="${product.imageUrl}"
+                                   maxlength="500"
+                                   placeholder="https://example.com/product.jpg">
+                        </div>
+
+                        <div class="field full">
+                            <label for="description">Description</label>
+                            <textarea id="description"
+                                      name="description"
+                                      maxlength="2000"
+                                      th:text="${product.description}"
+                                      placeholder="Describe the product..."></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="button-group">
+
+                        <button type="submit" class="save-btn">
+                            Update Product
+                        </button>
+
+                        <a th:href="@{/admin/products}" class="cancel-btn">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+        <!-- Reusable Footer -->
+        <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

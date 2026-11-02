@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: head(~{::title}, '/css/my-orders.css')}">
+    <title>My Orders | Gavai Swad</title>
+</head>
+
+<body>
+
+    <!-- Common Customer Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="orders-page">
+
+        <!-- Page Heading -->
+        <section class="orders-hero">
+            <div class="orders-hero-content">
+                <span class="eyebrow">YOUR SHOPPING JOURNEY</span>
+                <h1>My Orders</h1>
+                <p>Track your purchases and stay updated on every delivery.</p>
+            </div>
+        </section>
+
+        <section class="orders-container">
+
+            <!-- Orders Available -->
+            <div th:if="${orders != null and !orders.isEmpty()}">
+
+                <div class="order-card" th:each="order : ${orders}">
+
+                    <!-- Order Header -->
+                    <div class="order-header">
+
+                        <div>
+                            <span class="order-label">ORDER NUMBER</span>
+                            <h2 class="order-id">
+                                #<span th:text="${order.id}">1</span>
+                            </h2>
+
+                            <p class="order-date"
+                               th:text="${#temporals.format(order.createdAt, 'dd MMM yyyy, hh:mm a')}">
+                                Order Date
+                            </p>
+                        </div>
+
+                        <span class="status-badge order-status"
+                              th:text="${order.orderStatus}">
+                            PLACED
+                        </span>
+
+                    </div>
+
+                    <!-- Order Tracking -->
+                    <div class="tracking-section">
+
+                        <h3 class="section-heading">
+                            <i class="bi bi-truck"></i>
+                            Order Tracking
+                        </h3>
+
+                        <!-- Cancelled Order -->
+                        <div th:if="${order.orderStatus == 'CANCELLED'}"
+                             class="tracking-cancelled">
+                            <i class="bi bi-x-circle"></i>
+                            This order has been cancelled.
+                        </div>
+
+                        <!-- Normal Tracking Timeline -->
+                        <div class="tracking-timeline"
+                             th:unless="${order.orderStatus == 'CANCELLED'}">
+
+                            <div class="tracking-step"
+                                 th:classappend="${order.orderStatus == 'PLACED' or
+                                                  order.orderStatus == 'PROCESSING' or
+                                                  order.orderStatus == 'SHIPPED' or
+                                                  order.orderStatus == 'DELIVERED'} ? ' completed' : ''">
+
+                                <div class="tracking-circle">
+                                    <i class="bi bi-check"></i>
+                                </div>
+                                <p>Order Placed</p>
+                            </div>
+
+                            <div class="tracking-step"
+                                 th:classappend="${order.orderStatus == 'PROCESSING' or
+                                                  order.orderStatus == 'SHIPPED' or
+                                                  order.orderStatus == 'DELIVERED'} ? ' completed' : ''">
+
+                                <div class="tracking-circle">2</div>
+                                <p>Processing</p>
+                            </div>
+
+                            <div class="tracking-step"
+                                 th:classappend="${order.orderStatus == 'SHIPPED' or
+                                                  order.orderStatus == 'DELIVERED'} ? ' completed' : ''">
+
+                                <div class="tracking-circle">3</div>
+                                <p>Shipped</p>
+                            </div>
+
+                            <div class="tracking-step"
+                                 th:classappend="${order.orderStatus == 'DELIVERED'} ? ' completed' : ''">
+
+                                <div class="tracking-circle">
+                                    <i class="bi bi-house-check"></i>
+                                </div>
+                                <p>Delivered</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Order Information -->
+                    <div class="order-info">
+
+                        <div class="info-item">
+                            <span class="info-label">Payment Method</span>
+                            <strong class="info-value"
+                                    th:text="${order.paymentMethod}">
+                                COD
+                            </strong>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Payment Status</span>
+                            <span class="status-badge payment-status"
+                                  th:text="${order.paymentStatus}">
+                                PENDING
+                            </span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Delivery Address</span>
+                            <strong class="info-value"
+                                    th:text="${order.deliveryAddress}">
+                                Delivery Address
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <!-- Order Footer -->
+                    <div class="order-footer">
+
+                        <div>
+                            <span class="total-label">Total Amount</span>
+                            <div class="total-amount">
+                                ₹<span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 2)}">
+                                    0.00
+                                </span>
+                            </div>
+                        </div>
+
+                        <a th:href="@{/orders/{id}(id=${order.id})}"
+                           class="details-btn">
+                            View Order Details
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Empty Orders -->
+            <div class="empty-state"
+                 th:if="${orders == null or orders.isEmpty()}">
+
+                <div class="empty-icon">
+                    <i class="bi bi-bag-x"></i>
+                </div>
+
+                <h2>No Orders Yet!</h2>
+
+                <p>
+                    You haven't placed any orders yet.
+                    Explore our products and place your first order.
+                </p>
+
+                <a th:href="@{/products}" class="shop-btn">
+                    <i class="bi bi-shop"></i>
+                    Explore Products
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Common Customer Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <!-- Common Customer Scripts -->
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+
+</body>
+</html>

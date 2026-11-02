@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Orders | Gavai Swad</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #263238;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-container {
+            width: 96%;
+            max-width: 1600px;
+            margin: 30px auto;
+            flex: 1;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .table-container {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1150px;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+
+        th {
+            background: #285c36;
+            color: white;
+            white-space: nowrap;
+        }
+
+        tbody tr:hover {
+            background: #f8faf7;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .placed {
+            background: #fff0c2;
+            color: #805b00;
+        }
+
+        .processing {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .shipped {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .delivered {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .pending {
+            background: #fff0c2;
+            color: #805b00;
+        }
+
+        .paid {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .failed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .refunded {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .view-btn {
+            display: inline-block;
+            padding: 9px 13px;
+            background: #285c36;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .view-btn:hover {
+            background: #1d4528;
+        }
+
+        .update-form {
+            min-width: 150px;
+        }
+
+        .update-form label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .update-form select {
+            width: 100%;
+            padding: 9px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 12px;
+            background: white;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px 15px;
+            color: #666;
+        }
+
+        .message {
+            padding: 13px;
+            margin-bottom: 18px;
+            border-radius: 6px;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        @media (max-width: 768px) {
+            .admin-layout {
+                flex-direction: column;
+            }
+
+            .content-container {
+                width: 94%;
+            }
+
+            .table-container {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+    <!-- Reusable Admin Sidebar -->
+    <div th:replace="~{fragments/admin-sidebar :: adminSidebar}"></div>
+
+    <div class="main-content">
+
+        <!-- Reusable Admin Header -->
+        <div th:replace="~{fragments/admin-header :: adminHeader('Manage Orders')}"></div>
+
+        <main class="content-container">
+
+            <p class="subtitle">
+                View and manage all customer orders.
+            </p>
+
+            <!-- Success Message -->
+            <div class="message success-message"
+                 th:if="${successMessage}"
+                 th:text="${successMessage}">
+            </div>
+
+            <!-- Error Message -->
+            <div class="message error-message"
+                 th:if="${errorMessage}"
+                 th:text="${errorMessage}">
+            </div>
+
+            <div class="table-container">
+
+                <!-- Empty Orders -->
+                <div class="empty"
+                     th:if="${#lists.isEmpty(orders)}">
+
+                    <h2>No Orders Found</h2>
+
+                    <p>
+                        Customer orders will appear here after checkout.
+                    </p>
+
+                </div>
+
+                <!-- Orders Table -->
+                <table th:unless="${#lists.isEmpty(orders)}">
+
+                    <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Phone</th>
+                        <th>Delivery Address</th>
+                        <th>Order Date</th>
+                        <th>Total Amount</th>
+                        <th>Payment</th>
+                        <th>Payment Status</th>
+                        <th>Order Status</th>
+                        <th>Details</th>
+						<th>Delivery Partner</th>
+                        <th>Update Status</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="order : ${orders}">
+
+                        <td th:text="${order.id}">1</td>
+
+                        <td th:text="${order.fullName}">
+                            Customer Name
+                        </td>
+
+                        <td th:text="${order.phone}">
+                            Phone
+                        </td>
+
+                        <td th:text="${order.deliveryAddress}">
+                            Delivery Address
+                        </td>
+
+                        <td th:text="${#temporals.format(order.createdAt, 'dd MMM yyyy, hh:mm a')}">
+                            Order Date
+                        </td>
+
+                        <td>
+                            ₹<span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 2)}">
+                                0.00
+                            </span>
+                        </td>
+
+                        <td th:text="${order.paymentMethod}">
+                            COD
+                        </td>
+
+                        <td>
+                            <span class="status"
+                                  th:classappend="${#strings.toLowerCase(order.paymentStatus)}"
+                                  th:text="${order.paymentStatus}">
+                                PENDING
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="status"
+                                  th:classappend="${#strings.toLowerCase(order.orderStatus)}"
+                                  th:text="${order.orderStatus}">
+                                PLACED
+                            </span>
+                        </td>
+
+                        <!-- View Order -->
+                        <td>
+                            <a class="view-btn"
+                               th:href="@{/orders/{id}(id=${order.id})}">
+                                View
+                            </a>
+                        </td>
+
+                        <!-- Update Order and Payment Status -->
+                        <td>
+
+                            <form class="update-form"
+                                  th:action="@{/admin/orders/{id}/update-status(id=${order.id})}"
+                                  method="post">
+
+                                <label>Order Status</label>
+
+                                <select name="orderStatus" required>
+
+                                    <option value="PLACED"
+                                            th:selected="${order.orderStatus == 'PLACED'}">
+                                        Placed
+                                    </option>
+
+                                    <option value="PROCESSING"
+                                            th:selected="${order.orderStatus == 'PROCESSING'}">
+                                        Processing
+                                    </option>
+
+                                    <option value="SHIPPED"
+                                            th:selected="${order.orderStatus == 'SHIPPED'}">
+                                        Shipped
+                                    </option>
+
+                                    <option value="DELIVERED"
+                                            th:selected="${order.orderStatus == 'DELIVERED'}">
+                                        Delivered
+                                    </option>
+
+                                    <option value="CANCELLED"
+                                            th:selected="${order.orderStatus == 'CANCELLED'}">
+                                        Cancelled
+                                    </option>
+
+                                </select>
+
+                                <label>Payment Status</label>
+
+                                <select name="paymentStatus" required>
+
+                                    <option value="PENDING"
+                                            th:selected="${order.paymentStatus == 'PENDING'}">
+                                        Pending
+                                    </option>
+
+                                    <option value="PAID"
+                                            th:selected="${order.paymentStatus == 'PAID'}">
+                                        Paid
+                                    </option>
+
+                                    <option value="FAILED"
+                                            th:selected="${order.paymentStatus == 'FAILED'}">
+                                        Failed
+                                    </option>
+
+                                    <option value="REFUNDED"
+                                            th:selected="${order.paymentStatus == 'REFUNDED'}">
+                                        Refunded
+                                    </option>
+
+                                </select>
+
+                                <button type="submit" class="view-btn">
+                                    Update
+                                </button>
+
+                            </form>
+
+                        </td>
+
+						<!-- Assign Delivery Partner -->
+						<td>
+						    <form class="update-form"
+						          th:action="@{/admin/orders/{id}/assign-delivery(id=${order.id})}"
+						          method="post">
+
+						        <label>Select Delivery Partner</label>
+
+						        <select name="deliveryPartnerId" required>
+						            <option value="">-- Select Partner --</option>
+
+						            <option th:each="partner : ${deliveryPartners}"
+						                    th:value="${partner.id}"
+						                    th:text="${partner.fullName + ' (' + partner.phone + ')'}"
+						                    th:selected="${order.deliveryPartner != null and order.deliveryPartner.id == partner.id}">
+						            </option>
+						        </select>
+
+						        <button type="submit" class="view-btn">
+						            Assign Partner
+						        </button>
+
+						    </form>
+
+						    <p style="font-size: 12px; margin-top: 8px; color: #285c36;"
+						       th:if="${order.deliveryPartner != null}">
+						        Assigned:
+						        <strong th:text="${order.deliveryPartner.fullName}"></strong>
+						    </p>
+
+						    <p style="font-size: 12px; margin-top: 8px; color: #888;"
+						       th:unless="${order.deliveryPartner != null}">
+						        Not Assigned
+						    </p>
+						</td>
+
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </main>
+
+        <!-- Reusable Admin Footer -->
+        <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

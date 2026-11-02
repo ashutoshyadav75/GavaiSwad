@@ -1,0 +1,357 @@
+
+/* =========================================
+   GAVAI SWAD - REGISTER PAGE
+   Premium Green & Gold Theme
+========================================= */
+
+:root {
+    --primary-green: #245c35;
+    --dark-green: #153d25;
+    --light-green: #eaf4e9;
+    --gold: #d6a63c;
+    --dark-gold: #a77b20;
+    --text-dark: #243329;
+    --text-muted: #718078;
+    --border-color: rgba(36, 92, 53, 0.16);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(214, 166, 60, 0.13), transparent 30%),
+        linear-gradient(135deg, #f7faf5, #edf5ed);
+    color: var(--text-dark);
+}
+
+/* Main Page */
+
+.register-page {
+    min-height: 80vh;
+    padding: 55px 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Register Container */
+
+.register-container {
+    width: 100%;
+    max-width: 510px;
+    padding: 38px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 23px;
+    box-shadow: 0 15px 45px rgba(21, 61, 37, 0.10);
+    animation: fadeUp 0.8s ease both;
+}
+
+/* Brand */
+
+.register-brand {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.register-eyebrow {
+    display: inline-block;
+    color: var(--dark-gold);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    margin-bottom: 12px;
+}
+
+.register-brand h1 {
+    color: var(--primary-green);
+    font-size: 33px;
+    font-weight: 900;
+    margin: 0 0 8px;
+}
+
+.register-brand p {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0;
+}
+
+/* Heading */
+
+.register-heading {
+    text-align: center;
+    margin-bottom: 27px;
+}
+
+.register-heading h2 {
+    color: var(--text-dark);
+    font-size: 23px;
+    font-weight: 800;
+    margin: 0 0 8px;
+}
+
+.register-heading p {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0;
+}
+
+/* Form */
+
+.register-form-group {
+    margin-bottom: 19px;
+}
+
+.register-form-group label {
+    display: block;
+    color: #344b3a;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 9px;
+}
+
+/* Input Fields */
+
+.register-input {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 14px;
+    min-height: 51px;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.register-input:focus-within {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(36, 92, 53, 0.09);
+}
+
+.register-input i {
+    color: var(--dark-gold);
+    font-size: 17px;
+    flex-shrink: 0;
+}
+
+.register-input input {
+    width: 100%;
+    min-width: 0;
+    padding: 14px 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text-dark);
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.register-input input::placeholder {
+    color: #929b94;
+}
+
+/* CAPTCHA */
+
+.captcha-box {
+    padding: 18px;
+    margin: 24px 0 20px;
+    background: linear-gradient(135deg, #f1f8ed, #fff9e9);
+    border: 1px dashed rgba(167, 123, 32, 0.55);
+    border-radius: 13px;
+}
+
+.captcha-heading {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--primary-green);
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 13px;
+}
+
+.captcha-heading i {
+    color: var(--dark-gold);
+    font-size: 19px;
+}
+
+.captcha-question {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0 0 13px;
+    line-height: 1.6;
+}
+
+.captcha-question strong {
+    color: var(--primary-green);
+    font-size: 17px;
+    margin-left: 5px;
+}
+
+.captcha-box input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--border-color);
+    border-radius: 9px;
+    outline: none;
+    background: white;
+    color: var(--text-dark);
+    font-family: inherit;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.captcha-box input:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(36, 92, 53, 0.08);
+}
+
+/* Register Button */
+
+.register-btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    color: white;
+    background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.register-btn:hover {
+    background: linear-gradient(135deg, #367b49, var(--primary-green));
+    transform: translateY(-3px);
+    box-shadow: 0 9px 22px rgba(21, 61, 37, 0.20);
+}
+
+.register-btn i {
+    font-size: 17px;
+}
+
+/* Approval Note */
+
+.approval-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 13px;
+    margin-top: 17px;
+    color: #85621b;
+    background: #fff8e8;
+    border: 1px solid rgba(214, 166, 60, 0.30);
+    border-radius: 9px;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.approval-note i {
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+/* Alerts */
+
+.register-alert {
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    border-radius: 9px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.error-message {
+    color: #b42318;
+    background: #fff0ef;
+    border: 1px solid #f5c8c5;
+}
+
+.success-message {
+    color: #166534;
+    background: #eaf8ed;
+    border: 1px solid #c6e8cf;
+}
+
+/* Login Link */
+
+.register-login {
+    text-align: center;
+    margin-top: 26px;
+    padding-top: 21px;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.register-login a {
+    color: var(--primary-green);
+    font-weight: 800;
+    text-decoration: none;
+    margin-left: 4px;
+}
+
+.register-login a:hover {
+    color: var(--dark-gold);
+    text-decoration: underline;
+}
+
+/* Animation */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+
+@media (max-width: 550px) {
+
+    .register-page {
+        padding: 35px 14px;
+    }
+
+    .register-container {
+        padding: 28px 20px;
+        border-radius: 17px;
+    }
+
+    .register-brand h1 {
+        font-size: 29px;
+    }
+
+    .register-heading h2 {
+        font-size: 21px;
+    }
+}
+
+/* Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

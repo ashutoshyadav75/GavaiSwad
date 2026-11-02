@@ -1,0 +1,462 @@
+
+/* ==========================================
+   GAVAI SWAD - PREMIUM PRODUCTS PAGE
+   Green + Golden | Glassmorphism | Animation
+========================================== */
+
+/* ---------- Base ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f8f7f1;
+    color: #283629;
+}
+
+button,
+input,
+select {
+    font-family: inherit;
+}
+
+/* ---------- Hero Section ---------- */
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    padding: 55px 6%;
+    text-align: center;
+
+    background:
+        radial-gradient(circle at 10% 20%,
+        rgba(218,174,75,.20), transparent 30%),
+        radial-gradient(circle at 90% 80%,
+        rgba(40,92,54,.10), transparent 30%),
+        linear-gradient(135deg,#e9f1e2,#f8f5e9);
+
+    animation: shopFadeIn .8s ease both;
+}
+
+.hero h1 {
+    color: #245b35;
+    font-size: clamp(28px,4vw,44px);
+    font-weight: 800;
+    margin: 0 0 12px;
+    animation: shopFadeUp .7s ease both;
+}
+
+.hero p {
+    color: #586b55;
+    font-size: 17px;
+    margin: 0;
+    animation: shopFadeUp .9s ease both;
+}
+
+/* ---------- Main Container ---------- */
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 35px 20px;
+}
+
+/* ---------- Search Form ---------- */
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.search-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px;
+    border: 1px solid #ccd5c9;
+    border-radius: 9px;
+    font-size: 15px;
+}
+
+/* ---------- Glass Filter Form ---------- */
+
+.filter-form {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1fr 1fr auto auto;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 22px;
+
+    background: rgba(255,255,255,.68);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 18px;
+
+    box-shadow: 0 10px 30px rgba(37,83,48,.08);
+    transition: all .35s ease;
+}
+
+.filter-form:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(37,83,48,.13);
+}
+
+.filter-form input,
+.filter-form select {
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid #ccd5c9;
+    border-radius: 8px;
+    font-size: 14px;
+    background: rgba(255,255,255,.85);
+    transition: all .3s ease;
+}
+
+.filter-form input:focus,
+.filter-form select:focus {
+    outline: none;
+    border-color: #285c36;
+    box-shadow: 0 0 0 4px rgba(40,92,54,.10);
+}
+
+.filter-form button {
+    white-space: nowrap;
+}
+
+.filter-form .clear-button {
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* ---------- Buttons ---------- */
+
+button,
+.clear-button {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 19px;
+    background: linear-gradient(135deg,#285c36,#397849);
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all .3s ease;
+}
+
+button:hover:not(:disabled) {
+    background: linear-gradient(135deg,#1d4528,#285c36);
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(40,92,54,.18);
+}
+
+button:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
+.clear-button {
+    display: inline-block;
+    background: #fff4d7;
+    color: #87651f;
+    border: 1px solid #ead49c;
+}
+
+.clear-button:hover {
+    background: #e9ad36;
+    color: #283629;
+}
+
+/* ---------- Validation Error ---------- */
+
+.error {
+    color: #b42318;
+    background: #fff0ed;
+    border: 1px solid #f5d2cc;
+    padding: 13px 17px;
+    border-radius: 9px;
+    margin-bottom: 20px;
+}
+
+/* ---------- Section Title ---------- */
+
+.section-title {
+    color: #245b35;
+    font-size: 27px;
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+/* ---------- Product Grid ---------- */
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    gap: 23px;
+}
+
+/* ---------- Glass Product Cards ---------- */
+
+.product-card {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    background: rgba(255,255,255,.76);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 18px;
+
+    box-shadow: 0 8px 25px rgba(37,83,48,.07);
+
+    animation: shopFadeUp .7s ease both;
+    transition: transform .4s ease, box-shadow .4s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-9px);
+    box-shadow: 0 18px 38px rgba(37,83,48,.16);
+}
+
+/* ---------- Product Image ---------- */
+
+.product-image {
+    height: 210px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #edf2e7;
+    color: #52704f;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .6s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.09);
+}
+
+.product-image span {
+    font-size: 20px;
+    font-weight: 700;
+    color: #52704f;
+}
+
+/* ---------- Product Content ---------- */
+
+.product-content {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.category-label {
+    display: inline-block;
+    color: #a27b2b;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+}
+
+.product-content h3 {
+    color: #245b35;
+    font-size: 19px;
+    font-weight: 800;
+    margin: 9px 0;
+}
+
+.description {
+    color: #6c7468;
+    font-size: 14px;
+    line-height: 1.6;
+    flex: 1;
+}
+
+.price {
+    font-size: 23px;
+    font-weight: 800;
+    color: #28633b;
+    margin: 12px 0 6px;
+}
+
+.stock {
+    font-size: 13px;
+    color: #198754;
+    margin: 5px 0;
+}
+
+.out-of-stock {
+    color: #b52b2b;
+}
+
+/* ---------- Add to Cart ---------- */
+
+.add-to-cart-btn {
+    width: 100%;
+    padding: 13px;
+    margin-top: 12px;
+
+    background: linear-gradient(135deg,#285c36,#397849);
+    color: white;
+
+    border: none;
+    border-radius: 9px;
+
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+
+    box-shadow: 0 5px 15px rgba(40,92,54,.15);
+    transition: all .3s ease;
+}
+
+.add-to-cart-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg,#1d4528,#285c36);
+    transform: translateY(-3px);
+    box-shadow: 0 9px 20px rgba(40,92,54,.22);
+}
+
+.add-to-cart-btn:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
+/* ---------- Empty State ---------- */
+
+.empty-state {
+    background: rgba(255,255,255,.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 18px;
+
+    padding: 45px 20px;
+    text-align: center;
+    color: #6c7468;
+
+    box-shadow: 0 10px 30px rgba(37,83,48,.08);
+    animation: shopFadeUp .7s ease both;
+}
+
+.empty-state h3 {
+    color: #245b35;
+    font-weight: 800;
+}
+
+/* ---------- Animations ---------- */
+
+@keyframes shopFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shopFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ---------- Responsive ---------- */
+
+@media(max-width:1000px) {
+    .filter-form {
+        grid-template-columns: repeat(3,minmax(0,1fr));
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(3,minmax(0,1fr));
+    }
+}
+
+@media(max-width:750px) {
+    .filter-form {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:550px) {
+    .hero {
+        padding: 40px 18px;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 25px 14px;
+    }
+
+    .filter-form {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+
+    .filter-form button,
+    .filter-form .clear-button {
+        width: 100%;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .product-image {
+        height: 210px;
+    }
+
+    .section-title {
+        font-size: 23px;
+    }
+}
+
+/* ---------- Accessibility ---------- */
+
+@media(prefers-reduced-motion:reduce) {
+    .product-card,
+    .hero,
+    .hero h1,
+    .hero p,
+    .empty-state {
+        animation: none;
+        transition: none;
+    }
+
+    .product-card:hover,
+    .filter-form:hover {
+        transform: none;
+    }
+}

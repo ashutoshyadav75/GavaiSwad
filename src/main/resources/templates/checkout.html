@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: head(~{::title}, '/css/checkout.css')}">
+    <title>Checkout | Gavai Swad</title>
+</head>
+
+<body>
+
+<!-- Common Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="checkout-page">
+
+    <div class="checkout-container">
+
+        <div class="checkout-heading">
+            <span class="checkout-label">ALMOST THERE</span>
+            <h1>Complete Your Order</h1>
+            <p>Provide your delivery details and confirm your order.</p>
+        </div>
+
+        <!-- Error Message -->
+        <div th:if="${errorMessage}"
+             class="checkout-error"
+             th:text="${errorMessage}">
+        </div>
+
+        <div class="checkout-layout">
+
+            <!-- Delivery Details -->
+            <section class="checkout-card">
+
+                <div class="card-heading">
+                    <div class="heading-icon">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+                    <div>
+                        <h2>Delivery Details</h2>
+                        <p>Where should we deliver your order?</p>
+                    </div>
+                </div>
+
+                <form th:action="@{/checkout/place-order}"
+                      method="post"
+                      class="checkout-form">
+
+                    <div class="checkout-form-group">
+                        <label for="fullName">Full Name *</label>
+                        <div class="checkout-input">
+                            <i class="bi bi-person"></i>
+                            <input type="text"
+                                   id="fullName"
+                                   name="fullName"
+                                   th:value="${user.fullName}"
+                                   maxlength="150"
+                                   autocomplete="name"
+                                   placeholder="Enter your full name"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="checkout-form-group">
+                        <label for="phone">Mobile Number *</label>
+                        <div class="checkout-input">
+                            <i class="bi bi-telephone"></i>
+                            <input type="tel"
+                                   id="phone"
+                                   name="phone"
+								   th:value="${user.phone}"
+                                   maxlength="20"
+                                   pattern="[0-9+\-\s]{10,20}"
+                                   title="Enter a valid mobile number"
+                                   autocomplete="tel"
+                                   placeholder="Enter mobile number"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="checkout-form-group">
+                        <label for="deliveryAddress">Full Delivery Address *</label>
+                        <div class="checkout-input textarea-wrapper">
+                            <i class="bi bi-house"></i>
+                            <textarea id="deliveryAddress"
+                                      name="deliveryAddress"
+									  th:text="${user.deliveryAddress}"
+                                      maxlength="500"
+                                      autocomplete="street-address"
+                                      placeholder="House number, street, village/city, district, state and PIN code"
+                                      required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Payment Option -->
+                    <div class="payment-option">
+
+                        <div class="payment-icon">
+                            <i class="bi bi-cash-coin"></i>
+                        </div>
+
+                        <div class="payment-details">
+                            <strong>Cash on Delivery (COD)</strong>
+                            <p>Pay for your order when it is delivered to you.</p>
+                            <span>Online payment will be integrated later.</span>
+                        </div>
+
+                        <i class="bi bi-check-circle-fill payment-check"></i>
+
+                    </div>
+
+                    <button type="submit" class="place-order-btn">
+                        Place Order
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                </form>
+
+                <a th:href="@{/cart}" class="back-link">
+                    <i class="bi bi-arrow-left"></i>
+                    Back to Cart
+                </a>
+
+            </section>
+
+            <!-- Order Summary -->
+            <section class="checkout-card order-summary">
+
+                <div class="card-heading">
+                    <div class="heading-icon">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+                    <div>
+                        <h2>Order Summary</h2>
+                        <p>Review your selected products.</p>
+                    </div>
+                </div>
+
+                <div th:each="item : ${cartItems}" class="order-item">
+
+                    <div class="order-item-info">
+
+                        <div class="item-name"
+                             th:text="${item.product.name}">
+                            Product Name
+                        </div>
+
+                        <div class="item-details">
+                            Quantity:
+                            <span th:text="${item.quantity}">1</span>
+                        </div>
+
+                    </div>
+
+                    <div class="item-price">
+                        &#8377;<span
+                            th:text="${#numbers.formatDecimal(item.product.price * item.quantity, 1, 2)}">
+                            0.00
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="total-row">
+                    <span>Total Amount</span>
+
+                    <span class="total-amount">
+                        &#8377;<span
+                            th:text="${#numbers.formatDecimal(cartTotal, 1, 2)}">
+                            0.00
+                        </span>
+                    </span>
+                </div>
+
+                <div class="summary-note">
+                    <i class="bi bi-info-circle"></i>
+                    Final payable amount is shown above. Payment method: COD.
+                </div>
+
+                <div class="secure-note">
+                    <i class="bi bi-shield-check"></i>
+                    Secure order placement
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</main>
+
+<!-- Common Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Common Scripts -->
+<div th:replace="~{fragments/scripts :: scripts}"></div>
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+
+.login-page {
+    min-height: 75vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 65px 20px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f4f8ef, #fff8e8);
+}
+
+.login-background {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: rgba(195, 157, 65, 0.13);
+    filter: blur(70px);
+    top: 5%;
+    right: 10%;
+}
+
+.login-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 460px;
+    padding: 42px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 20px 55px rgba(31, 72, 38, 0.12);
+    animation: loginAppear 0.7s ease;
+}
+
+.login-brand {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.brand-icon {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    border-radius: 18px;
+    color: #fff;
+    background: linear-gradient(135deg, #174b2a, #287342);
+    font-size: 27px;
+    box-shadow: 0 8px 20px rgba(23, 75, 42, 0.2);
+}
+
+.login-brand h1 {
+    color: #174b2a;
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.login-brand p {
+    color: #777;
+    font-size: 13px;
+}
+
+.login-heading {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.welcome-label {
+    color: #b18a31;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.login-heading h2 {
+    color: #173c25;
+    font-size: 24px;
+    font-weight: 750;
+    margin: 9px 0;
+}
+
+.login-heading p {
+    color: #777;
+    font-size: 13px;
+}
+
+.login-message {
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 17px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.error-message {
+    color: #a00000;
+    background: #fff0ef;
+    border: 1px solid #ffd5d2;
+}
+
+.success-message {
+    color: #17652b;
+    background: #e9f8ec;
+    border: 1px solid #c9edcf;
+}
+
+.login-form-group {
+    margin-bottom: 21px;
+}
+
+.login-form-group label {
+    display: block;
+    color: #294632;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 9px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a58a43;
+    font-size: 17px;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 14px 15px 14px 45px;
+    border: 1px solid #dce5d9;
+    border-radius: 11px;
+    outline: none;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.85);
+    transition: 0.3s ease;
+}
+
+.input-wrapper input:focus {
+    border-color: #287342;
+    box-shadow: 0 0 0 4px rgba(40, 115, 66, 0.1);
+}
+
+.login-button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #174b2a, #287342);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 8px 18px rgba(23, 75, 42, 0.17);
+}
+
+.login-button i {
+    margin-left: 8px;
+}
+
+.login-button:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, #10391f, #1c5c32);
+    box-shadow: 0 12px 24px rgba(23, 75, 42, 0.23);
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 25px;
+    color: #777;
+    font-size: 13px;
+}
+
+.register-link a {
+    color: #1c6535;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.register-link a:hover {
+    color: #b18a31;
+    text-decoration: underline;
+}
+
+.login-security {
+    margin-top: 25px;
+    padding-top: 18px;
+    border-top: 1px solid #e8eee5;
+    text-align: center;
+    color: #819080;
+    font-size: 12px;
+}
+
+.login-security i {
+    color: #b18a31;
+    margin-right: 5px;
+}
+
+@keyframes loginAppear {
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 576px) {
+    .login-page {
+        padding: 40px 15px;
+    }
+
+    .login-container {
+        padding: 28px 22px;
+    }
+
+    .login-heading h2 {
+        font-size: 21px;
+    }
+}

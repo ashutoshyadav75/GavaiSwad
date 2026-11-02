@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Gavai Swad</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/admin-dashboard.css}">
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+    <!-- Admin Sidebar -->
+    <div th:replace="~{fragments/admin-sidebar :: adminSidebar}"></div>
+
+    <div class="main-content">
+
+        <!-- Admin Header -->
+        <div th:replace="~{fragments/admin-header :: adminHeader('Dashboard')}"></div>
+
+        <main class="content-container">
+
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+
+                <div>
+                    <span class="eyebrow">
+                        <i class="bi bi-grid-1x2-fill"></i>
+                        ADMINISTRATION / OVERVIEW
+                    </span>
+
+                    <h1>Welcome to Admin Dashboard</h1>
+
+                    <p>
+                        Manage your customers, monitor account approvals
+                        and keep your Gavai Swad store running smoothly.
+                    </p>
+                </div>
+
+                <div class="welcome-icon">
+                    <i class="bi bi-shop"></i>
+                </div>
+
+            </section>
+
+            <!-- Success Message -->
+            <div class="message"
+                 th:if="${message}"
+                 th:text="${message}">
+            </div>
+
+            <!-- Dashboard Statistics -->
+            <section class="stats-grid">
+
+                <article class="stat-card accounts-card">
+
+                    <div class="stat-top">
+                        <div class="stat-icon">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <span class="stat-label">CUSTOMERS</span>
+                    </div>
+
+                    <h3>Total Registered Accounts</h3>
+
+                    <p class="stat-value" th:text="${users.size()}">0</p>
+
+                    <span class="stat-description">
+                        <i class="bi bi-person-check"></i>
+                        All registered accounts
+                    </span>
+
+                </article>
+
+                <article class="stat-card pending-card">
+
+                    <div class="stat-top">
+                        <div class="stat-icon">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+                        <span class="stat-label">PENDING</span>
+                    </div>
+
+                    <h3>Pending Approvals</h3>
+
+                    <p class="stat-value" th:text="${pendingCount}">0</p>
+
+                    <span class="stat-description">
+                        <i class="bi bi-clock-history"></i>
+                        Awaiting admin approval
+                    </span>
+
+                </article>
+
+                <article class="stat-card approved-card">
+
+                    <div class="stat-top">
+                        <div class="stat-icon">
+                            <i class="bi bi-patch-check-fill"></i>
+                        </div>
+                        <span class="stat-label">APPROVED</span>
+                    </div>
+
+                    <h3>Approved Accounts</h3>
+
+                    <p class="stat-value" th:text="${approvedCount}">0</p>
+
+                    <span class="stat-description">
+                        <i class="bi bi-check-circle"></i>
+                        Active approved accounts
+                    </span>
+
+                </article>
+
+            </section>
+
+            <!-- Registered Customers -->
+            <section class="table-section">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="section-eyebrow">CUSTOMER MANAGEMENT</span>
+                        <h2>Registered Accounts</h2>
+                        <p>Review customer details and manage account access.</p>
+                    </div>
+
+                    <div class="total-badge">
+                        <i class="bi bi-people"></i>
+                        <span th:text="${users.size()}">0</span> Accounts
+                    </div>
+
+                </div>
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Email Address</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Account Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <tr th:each="user : ${users}">
+
+                            <td class="user-id" th:text="${user.id}">1</td>
+
+                            <td>
+                                <div class="customer-info">
+                                    <div class="customer-avatar">
+                                        <i class="bi bi-person-fill"></i>
+                                    </div>
+                                    <span th:text="${user.fullName}">Customer</span>
+                                </div>
+                            </td>
+
+                            <td class="email-cell"
+                                th:text="${user.email}">
+                                customer@example.com
+                            </td>
+
+                            <td th:text="${user.phone}">9999999999</td>
+
+                            <td>
+                                <span class="role-badge"
+                                      th:text="${user.role}">
+                                    USER
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="status"
+                                      th:classappend="${user.accountStatus == 'PENDING' ? ' pending' : (user.accountStatus == 'APPROVED' ? ' approved' : ' blocked')}"
+                                      th:text="${user.accountStatus}">
+                                    PENDING
+                                </span>
+                            </td>
+
+                            <td class="actions-cell">
+
+                                <div th:if="${user.role != 'ADMIN'}"
+                                     class="action-group">
+
+                                    <form th:if="${user.accountStatus != 'APPROVED'}"
+                                          th:action="@{/admin/approve/{id}(id=${user.id})}"
+                                          method="post">
+
+                                        <button type="submit"
+                                                class="action-btn approve-btn">
+                                            <i class="bi bi-check-lg"></i>
+                                            Approve
+                                        </button>
+
+                                    </form>
+
+                                    <form th:if="${user.accountStatus != 'BLOCKED'}"
+                                          th:action="@{/admin/block/{id}(id=${user.id})}"
+                                          method="post">
+
+                                        <button type="submit"
+                                                class="action-btn block-btn">
+                                            <i class="bi bi-slash-circle"></i>
+                                            Block
+                                        </button>
+
+                                    </form>
+
+                                    <span th:if="${user.accountStatus == 'BLOCKED'}"
+                                          class="blocked-note">
+                                        <i class="bi bi-lock-fill"></i>
+                                        Account blocked
+                                    </span>
+
+                                </div>
+
+                                <span th:if="${user.role == 'ADMIN'}"
+                                      class="admin-note">
+                                    <i class="bi bi-shield-check"></i>
+                                    Admin account
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(users)}">
+                            <td colspan="7" class="empty-state">
+                                <i class="bi bi-people"></i>
+                                <h3>No registered accounts found</h3>
+                                <p>Customer accounts will appear here after registration.</p>
+                            </td>
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="table-footer">
+                    <i class="bi bi-info-circle"></i>
+                    Review account details before approving or blocking a customer.
+                </div>
+
+            </section>
+
+        </main>
+
+        <!-- Admin Footer -->
+        <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

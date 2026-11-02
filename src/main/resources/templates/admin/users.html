@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Customers | Gavai Swad</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7f2;
+            color: #263526;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-container {
+            padding: 30px;
+            flex: 1;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.06);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #28633b;
+        }
+
+        .message, .error {
+            padding: 12px 15px;
+            margin-bottom: 18px;
+            border-radius: 6px;
+        }
+
+        .message {
+            background: #e0f5e5;
+            color: #216b35;
+        }
+
+        .error {
+            background: #ffe7e7;
+            color: #a52222;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e6e9e4;
+        }
+
+        th {
+            background: #edf4ed;
+            color: #285c36;
+            font-size: 13px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .approved {
+            background: #e0f5e5;
+            color: #216b35;
+        }
+
+        .blocked {
+            background: #ffe7e7;
+            color: #a52222;
+        }
+
+        .action-form {
+            display: inline-block;
+            margin: 3px;
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .approve-btn {
+            background: #218838;
+        }
+
+        .block-btn {
+            background: #dc3545;
+        }
+
+        .unblock-btn {
+            background: #28633b;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+
+        @media(max-width:768px) {
+            .admin-layout {
+                flex-direction: column;
+            }
+
+            .content-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+    <!-- Reusable Sidebar -->
+    <div th:replace="~{fragments/admin-sidebar :: adminSidebar}"></div>
+
+    <div class="main-content">
+
+        <!-- Reusable Header -->
+        <div th:replace="~{fragments/admin-header :: adminHeader('Manage Customers')}"></div>
+
+        <main class="content-container">
+
+            <div th:if="${message}"
+                 class="message"
+                 th:text="${message}">
+            </div>
+
+            <div th:if="${error}"
+                 class="error"
+                 th:text="${error}">
+            </div>
+
+            <section class="card">
+
+                <h2>Registered Customers</h2>
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Account Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <tr th:each="user : ${users}">
+
+                            <td th:text="${user.id}"></td>
+
+                            <td th:text="${user.fullName}"></td>
+
+                            <td th:text="${user.email}"></td>
+
+                            <td th:text="${user.phone}"></td>
+
+                            <td th:text="${user.role}"></td>
+
+                            <td>
+                                <span class="status"
+                                      th:classappend="${#strings.toLowerCase(user.accountStatus)}"
+                                      th:text="${user.accountStatus}">
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <!-- Pending: Approve -->
+                                <form th:if="${user.accountStatus == 'PENDING'}"
+                                      th:action="@{/admin/users/approve/{id}(id=${user.id})}"
+                                      method="post"
+                                      class="action-form">
+
+                                    <button type="submit"
+                                            class="action-btn approve-btn">
+                                        Approve
+                                    </button>
+                                </form>
+
+                                <!-- Approved: Block -->
+                                <form th:if="${user.accountStatus == 'APPROVED'}"
+                                      th:action="@{/admin/users/block/{id}(id=${user.id})}"
+                                      method="post"
+                                      class="action-form">
+
+                                    <button type="submit"
+                                            class="action-btn block-btn">
+                                        Block
+                                    </button>
+                                </form>
+
+                                <!-- Blocked: Unblock -->
+                                <form th:if="${user.accountStatus == 'BLOCKED'}"
+                                      th:action="@{/admin/users/unblock/{id}(id=${user.id})}"
+                                      method="post"
+                                      class="action-form">
+
+                                    <button type="submit"
+                                            class="action-btn unblock-btn">
+                                        Unblock
+                                    </button>
+                                </form>
+
+                                <span th:if="${user.role == 'ADMIN'}">
+                                    Admin Account
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(users)}">
+                            <td colspan="7" class="empty">
+                                No registered customers found.
+                            </td>
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <!-- Reusable Footer -->
+        <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

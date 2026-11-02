@@ -1,0 +1,784 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head th:replace="~{fragments/header :: head(~{::title}, null)}">
+
+    <title>My Cart | Gavai Swad</title>
+</head>
+
+<body class="cart-page">
+
+<!-- Common Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Cart Hero -->
+<section class="cart-hero">
+    <div class="hero-content">
+        <span class="hero-tag">YOUR SHOPPING BAG</span>
+        <h1>My Shopping Cart</h1>
+        <p>Authentic village flavours, delivered to your home.</p>
+    </div>
+</section>
+
+<main class="cart-container">
+
+    <!-- Success Message -->
+    <div th:if="${successMessage}"
+         class="cart-alert success-alert"
+         th:text="${successMessage}">
+    </div>
+
+    <!-- Error Message -->
+    <div th:if="${errorMessage}"
+         class="cart-alert error-alert"
+         th:text="${errorMessage}">
+    </div>
+
+    <!-- Empty Cart -->
+    <div th:if="${#lists.isEmpty(cartItems)}"
+         class="empty-cart glass-card">
+
+        <div class="empty-icon">
+            <i class="bi bi-bag-x"></i>
+        </div>
+
+        <h2>Your Cart is Empty!</h2>
+
+        <p>
+            Your favourite traditional products are waiting for you.
+            Explore our collection and add something delicious.
+        </p>
+
+        <a th:href="@{/products}" class="cart-btn">
+            <i class="bi bi-shop me-2"></i>
+            Explore Products
+        </a>
+
+    </div>
+
+    <!-- Cart Products -->
+    <div th:unless="${#lists.isEmpty(cartItems)}"
+         class="cart-layout">
+
+        <section class="cart-products">
+
+            <div class="section-heading">
+                <h2>Shopping Items</h2>
+                <span th:text="${#lists.size(cartItems)} + ' Items'">
+                    0 Items
+                </span>
+            </div>
+
+            <article class="cart-item glass-card"
+                     th:each="item, stat : ${cartItems}"
+                     th:style="'--item-index:' + ${stat.index}">
+
+                <div class="item-image">
+
+                    <img th:if="${item.product.imageUrl != null
+                                 and !item.product.imageUrl.isBlank()}"
+                         th:src="${item.product.imageUrl}"
+                         th:alt="${item.product.name}">
+
+                    <div th:unless="${item.product.imageUrl != null
+                                     and !item.product.imageUrl.isBlank()}"
+                         class="image-placeholder">
+                        <i class="bi bi-basket2"></i>
+                    </div>
+
+                </div>
+
+                <div class="item-info">
+
+                    <span class="item-category"
+                          th:text="${item.product.category}">
+                        Category
+                    </span>
+
+                    <h3 th:text="${item.product.name}">
+                        Product Name
+                    </h3>
+
+                    <p class="item-description">
+                        Traditional taste made with care.
+                    </p>
+
+                    <div class="item-price">
+                        ₹<span th:text="${item.product.price}">0.00</span>
+                    </div>
+
+                    <div class="item-stock"
+                         th:if="${item.product.stock > 0}">
+                        <i class="bi bi-check-circle-fill"></i>
+                        In Stock
+                    </div>
+
+                </div>
+
+                <div class="item-actions">
+
+                    <!-- Update Quantity -->
+                    <form th:action="@{/cart/update}"
+                          method="post"
+                          class="quantity-form">
+
+                        <input type="hidden"
+                               name="cartItemId"
+                               th:value="${item.id}">
+
+                        <label>Quantity</label>
+
+                        <input type="number"
+                               name="quantity"
+                               th:value="${item.quantity}"
+                               min="1"
+                               th:max="${item.product.stock}"
+                               required>
+
+                        <button type="submit"
+                                class="update-btn">
+                            <i class="bi bi-arrow-repeat"></i>
+                            Update
+                        </button>
+
+                    </form>
+
+                    <!-- Remove Item -->
+                    <form th:action="@{/cart/remove}"
+                          method="post"
+                          onsubmit="return confirm('Remove this product from your cart?');">
+
+                        <input type="hidden"
+                               name="cartItemId"
+                               th:value="${item.id}">
+
+                        <button type="submit"
+                                class="remove-btn">
+                            <i class="bi bi-trash3"></i>
+                            Remove
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <div class="item-subtotal">
+
+                    <span>Subtotal</span>
+
+                    <strong>
+                        ₹<span th:text="${item.product.price * item.quantity}">
+                            0.00
+                        </span>
+                    </strong>
+
+                </div>
+
+            </article>
+
+            <a th:href="@{/products}" class="continue-link">
+                <i class="bi bi-arrow-left"></i>
+                Continue Shopping
+            </a>
+
+        </section>
+
+        <!-- Order Summary -->
+        <aside class="order-summary glass-card">
+
+            <div class="summary-heading">
+                <i class="bi bi-receipt"></i>
+                <h2>Order Summary</h2>
+            </div>
+
+            <div class="summary-row">
+                <span>Products</span>
+                <span th:text="${#lists.size(cartItems)}">0</span>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-total">
+                <span>Grand Total</span>
+                <strong>
+                    ₹<span th:text="${cartTotal}">0.00</span>
+                </strong>
+            </div>
+
+            <p class="summary-note">
+                Final delivery charges, if applicable, will be
+                shown during checkout.
+            </p>
+
+            <a th:href="@{/checkout}" class="checkout-btn">
+                Proceed to Checkout
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+            <div class="secure-note">
+                <i class="bi bi-shield-check"></i>
+                Safe and Secure Shopping
+            </div>
+
+        </aside>
+
+    </div>
+
+</main>
+
+<!-- Common Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Common Scripts -->
+<div th:replace="~{fragments/scripts :: scripts}"></div>
+
+<style>
+
+/* ==============================
+   CART PAGE - GAVAI SWAD
+   Green + Golden Glass Theme
+============================== */
+
+.cart-page {
+    background: #f7f8f1;
+    color: #263d2b;
+    overflow-x: hidden;
+}
+
+/* Hero */
+
+.cart-hero {
+    position: relative;
+    padding: 65px 20px;
+    text-align: center;
+    background:
+        radial-gradient(circle at 15% 20%,
+        rgba(231, 183, 74, .22), transparent 30%),
+        linear-gradient(135deg, #e9f1e2, #f8f5e9);
+    overflow: hidden;
+}
+
+.hero-content {
+    animation: cartFadeUp .8s ease both;
+}
+
+.hero-tag {
+    display: inline-block;
+    color: #b1842e;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+}
+
+.cart-hero h1 {
+    color: #245b35;
+    font-size: clamp(30px, 5vw, 46px);
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.cart-hero p {
+    color: #657361;
+    font-size: 16px;
+}
+
+/* Main Container */
+
+.cart-container {
+    max-width: 1250px;
+    margin: 45px auto;
+    padding: 0 22px 50px;
+    min-height: 400px;
+}
+
+/* Glass Cards */
+
+.glass-card {
+    background: rgba(255, 255, 255, .72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, .85);
+    border-radius: 20px;
+    box-shadow: 0 10px 35px rgba(37, 83, 48, .08);
+}
+
+/* Layout */
+
+.cart-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 350px;
+    gap: 25px;
+    align-items: start;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-heading h2 {
+    color: #245b35;
+    font-weight: 800;
+    font-size: 24px;
+}
+
+.section-heading span {
+    color: #8b6a26;
+    background: #fff4d7;
+    border-radius: 20px;
+    padding: 7px 15px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Cart Item */
+
+.cart-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 125px minmax(0, 1fr) 140px 110px;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 18px;
+    animation: cartFadeUp .6s ease both;
+    animation-delay: calc(var(--item-index, 0) * .1s);
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.cart-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 35px rgba(37, 83, 48, .14);
+}
+
+/* Product Image */
+
+.item-image {
+    width: 125px;
+    height: 125px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #edf2e7;
+}
+
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .5s ease;
+}
+
+.cart-item:hover .item-image img {
+    transform: scale(1.1);
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    font-size: 38px;
+    color: #719273;
+}
+
+/* Product Information */
+
+.item-category {
+    color: #9b792e;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.item-info h3 {
+    color: #245b35;
+    font-size: 19px;
+    font-weight: 800;
+    margin: 8px 0;
+}
+
+.item-description {
+    color: #777f73;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.item-price {
+    color: #245b35;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.item-stock {
+    color: #198754;
+    font-size: 12px;
+    margin-top: 7px;
+}
+
+/* Actions */
+
+.item-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quantity-form {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.quantity-form label {
+    font-size: 12px;
+    color: #687568;
+    font-weight: 700;
+}
+
+.quantity-form input {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #d6e2d3;
+    border-radius: 8px;
+    outline: none;
+    background: rgba(255,255,255,.8);
+}
+
+.quantity-form input:focus {
+    border-color: #285c36;
+    box-shadow: 0 0 0 3px rgba(40,92,54,.1);
+}
+
+.update-btn,
+.remove-btn {
+    width: 100%;
+    border: none;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.update-btn {
+    background: #285c36;
+    color: white;
+}
+
+.update-btn:hover {
+    background: #1b4228;
+    transform: translateY(-2px);
+}
+
+.remove-btn {
+    background: #fff0ed;
+    color: #b42318;
+    border: 1px solid #f5d2cc;
+}
+
+.remove-btn:hover {
+    background: #b42318;
+    color: white;
+}
+
+/* Subtotal */
+
+.item-subtotal {
+    text-align: right;
+}
+
+.item-subtotal span {
+    display: block;
+    color: #7c8578;
+    font-size: 12px;
+    margin-bottom: 7px;
+}
+
+.item-subtotal strong {
+    color: #245b35;
+    font-size: 17px;
+}
+
+/* Summary */
+
+.order-summary {
+    padding: 25px;
+    position: sticky;
+    top: 25px;
+    animation: cartFadeUp .8s ease both;
+}
+
+.summary-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.summary-heading i {
+    font-size: 23px;
+    color: #bd9139;
+}
+
+.summary-heading h2 {
+    font-size: 21px;
+    color: #245b35;
+    font-weight: 800;
+    margin: 0;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    color: #687568;
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+.summary-divider {
+    height: 1px;
+    background: #dce6d8;
+    margin: 18px 0;
+}
+
+.summary-total {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.summary-total span {
+    color: #657361;
+    font-size: 14px;
+}
+
+.summary-total strong {
+    color: #245b35;
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.summary-note {
+    color: #828b7f;
+    font-size: 11px;
+    line-height: 1.6;
+    margin: 15px 0;
+}
+
+.checkout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    padding: 15px 18px;
+    background: linear-gradient(135deg, #285c36, #397849);
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 800;
+    transition: all .3s ease;
+    box-shadow: 0 7px 18px rgba(40,92,54,.18);
+}
+
+.checkout-btn:hover {
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(40,92,54,.25);
+}
+
+.secure-note {
+    text-align: center;
+    color: #68816a;
+    font-size: 12px;
+    margin-top: 18px;
+}
+
+.secure-note i {
+    color: #198754;
+    margin-right: 5px;
+}
+
+/* Continue Shopping */
+
+.continue-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    color: #285c36;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: gap .3s ease;
+}
+
+.continue-link:hover {
+    gap: 16px;
+    color: #b1842e;
+}
+
+/* Empty Cart */
+
+.empty-cart {
+    padding: 60px 25px;
+    text-align: center;
+    animation: cartFadeUp .7s ease both;
+}
+
+.empty-icon {
+    font-size: 65px;
+    color: #a6bd9f;
+    margin-bottom: 15px;
+}
+
+.empty-cart h2 {
+    color: #245b35;
+    font-weight: 800;
+}
+
+.empty-cart p {
+    color: #758071;
+    max-width: 500px;
+    margin: 15px auto 25px;
+    line-height: 1.7;
+}
+
+.cart-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #285c36, #397849);
+    color: white;
+    text-decoration: none;
+    padding: 13px 22px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all .3s ease;
+}
+
+.cart-btn:hover {
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(40,92,54,.2);
+}
+
+/* Alerts */
+
+.cart-alert {
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    animation: cartFadeUp .5s ease both;
+}
+
+.success-alert {
+    background: #e6f5e9;
+    color: #216b36;
+    border: 1px solid #c4e6cb;
+}
+
+.error-alert {
+    background: #fff0ed;
+    color: #b42318;
+    border: 1px solid #f5d2cc;
+}
+
+/* Animations */
+
+@keyframes cartFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+
+@media(max-width: 1050px) {
+    .cart-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .order-summary {
+        position: static;
+    }
+
+    .cart-item {
+        grid-template-columns: 110px minmax(0, 1fr) 130px;
+    }
+
+    .item-subtotal {
+        grid-column: 2 / 4;
+        text-align: left;
+    }
+}
+
+@media(max-width: 600px) {
+    .cart-container {
+        margin: 25px auto;
+        padding: 0 14px 35px;
+    }
+
+    .cart-hero {
+        padding: 45px 15px;
+    }
+
+    .cart-item {
+        grid-template-columns: 85px minmax(0, 1fr);
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .item-image {
+        width: 85px;
+        height: 85px;
+    }
+
+    .item-info h3 {
+        font-size: 16px;
+    }
+
+    .item-actions {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .item-subtotal {
+        grid-column: 1 / -1;
+        text-align: left;
+        border-top: 1px solid #e5ebe1;
+        padding-top: 12px;
+    }
+
+    .section-heading h2 {
+        font-size: 20px;
+    }
+
+    .order-summary {
+        padding: 20px;
+    }
+}
+
+@media(prefers-reduced-motion: reduce) {
+    .cart-page *,
+    .cart-page *::before,
+    .cart-page *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+}
+
+</style>
+
+</body>
+</html>

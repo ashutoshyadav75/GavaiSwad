@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<th:block th:fragment="adminSidebar">
+
+    <style>
+        .admin-sidebar {
+            width: 260px;
+            min-width: 260px;
+            min-height: 100vh;
+            height: 100%;
+            background: linear-gradient(180deg, #173e29, #245b38);
+            color: #ffffff;
+            padding: 26px 17px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 8px 0 30px rgba(22, 61, 40, 0.10);
+            z-index: 10;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #f4d58b;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-brand i {
+            font-size: 25px;
+        }
+
+        .sidebar-subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.58);
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: #d6bd80;
+            text-transform: uppercase;
+            letter-spacing: 1.8px;
+            padding: 12px 13px;
+        }
+
+        .admin-sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .admin-sidebar nav a,
+        .admin-sidebar .sidebar-bottom a {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px 15px;
+            color: rgba(255,255,255,0.84);
+            text-decoration: none;
+            border-radius: 11px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            border: 1px solid transparent;
+        }
+
+        .admin-sidebar nav a i,
+        .admin-sidebar .sidebar-bottom a i {
+            font-size: 17px;
+            width: 21px;
+            text-align: center;
+        }
+
+        .admin-sidebar nav a:hover,
+        .admin-sidebar .sidebar-bottom a:hover {
+            background: rgba(255,255,255,0.10);
+            color: #f5d78e;
+            border-color: rgba(255,255,255,0.10);
+            transform: translateX(4px);
+        }
+
+        .admin-sidebar nav a.active {
+            background: linear-gradient(110deg, #d6a642, #f0d58d);
+            color: #173e29;
+            box-shadow: 0 6px 18px rgba(214,166,66,0.22);
+        }
+
+        .sidebar-spacer {
+            flex: 1;
+            min-height: 35px;
+        }
+
+        .sidebar-bottom {
+            border-top: 1px solid rgba(255,255,255,0.16);
+            padding-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .admin-sidebar .logout-link {
+            color: #ffd6d2;
+            cursor: pointer;
+            background: transparent;
+            width: 100%;
+            border: none;
+            text-align: left;
+            font-family: inherit;
+        }
+
+        .admin-sidebar .logout-link:hover {
+            background: rgba(220,53,69,0.15);
+            color: #ffb5ae;
+        }
+
+        .sidebar-version {
+            text-align: center;
+            color: rgba(255,255,255,0.40);
+            font-size: 10px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                width: 100%;
+                min-width: 0;
+                min-height: auto;
+                height: auto;
+                padding: 18px 15px;
+            }
+
+            .sidebar-brand {
+                font-size: 21px;
+                margin-bottom: 5px;
+            }
+
+            .sidebar-subtitle {
+                margin-bottom: 12px;
+            }
+
+            .sidebar-label {
+                padding: 8px;
+            }
+
+            .admin-sidebar nav {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 7px;
+            }
+
+            .admin-sidebar nav a,
+            .admin-sidebar .sidebar-bottom a {
+                padding: 11px 9px;
+                font-size: 11px;
+                gap: 7px;
+            }
+
+            .sidebar-spacer {
+                display: none;
+            }
+
+            .sidebar-bottom {
+                margin-top: 15px;
+            }
+
+            .sidebar-version {
+                margin-top: 12px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .admin-sidebar nav {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <aside class="admin-sidebar">
+
+        <!-- Brand -->
+        <div class="sidebar-brand">
+            <i class="bi bi-shop"></i>
+            <span>GAVAI SWAD</span>
+        </div>
+
+        <p class="sidebar-subtitle">Admin Control Panel</p>
+
+        <!-- Main Navigation -->
+        <div class="sidebar-label">Main Menu</div>
+
+        <nav>
+
+            <a th:href="@{/admin/dashboard}">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a th:href="@{/admin/products}">
+                <i class="bi bi-box-seam"></i>
+                <span>Manage Products</span>
+            </a>
+
+            <a th:href="@{/admin/orders}">
+                <i class="bi bi-bag-check"></i>
+                <span>Manage Orders</span>
+            </a>
+
+            <a th:href="@{/admin/reports}">
+                <i class="bi bi-graph-up-arrow"></i>
+                <span>Reports & Analytics</span>
+            </a>
+
+            <a th:href="@{/admin/users}">
+                <i class="bi bi-people"></i>
+                <span>Manage Customers</span>
+            </a>
+			<a th:href="@{/admin/delivery-partners}">
+			    <i class="bi bi-truck"></i>
+			    <span>Delivery Partners</span>
+			</a>
+			
+        </nav>
+
+        <div class="sidebar-spacer"></div>
+
+        <!-- Bottom Navigation -->
+        <div class="sidebar-bottom">
+
+            <div class="sidebar-label">Account</div>
+
+            <a th:href="@{/products}">
+                <i class="bi bi-shop-window"></i>
+                <span>Back to Store</span>
+            </a>
+
+            <a class="logout-link"
+               href="#"
+               onclick="event.preventDefault(); document.getElementById('adminLogoutForm').submit();">
+
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+
+            <form id="adminLogoutForm"
+                  th:action="@{/logout}"
+                  method="post"
+                  style="display:none;">
+            </form>
+
+        </div>
+
+        <div class="sidebar-version">
+            Gavai Swad Admin Panel
+        </div>
+
+    </aside>
+
+</th:block>
+
+</body>
+</html>

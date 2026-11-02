@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<nav th:fragment="navbar"
+     class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+
+    <div class="container">
+
+        <!-- Brand Logo -->
+        <a class="navbar-brand fw-bold" th:href="@{/}">
+            <span class="text-success">GAVAI</span>
+            <span class="text-warning">SWAD</span>
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+
+            <!-- ================= GUEST NAVBAR ================= -->
+            <th:block th:if="${session.SPRING_SECURITY_CONTEXT == null
+                or !session.SPRING_SECURITY_CONTEXT.authentication.authenticated
+                or session.SPRING_SECURITY_CONTEXT.authentication.principal == 'anonymousUser'}">
+
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/products}">Shop</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/#about}">About Us</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/#contact}">Contact</a>
+                    </li>
+
+                </ul>
+
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+
+                    <a th:href="@{/cart}"
+                       class="btn btn-outline-success">
+                        <i class="bi bi-cart3"></i> Cart
+                    </a>
+
+                    <a th:href="@{/login}"
+                       class="btn btn-outline-dark">
+                        Login
+                    </a>
+
+                    <a th:href="@{/register}"
+                       class="btn btn-success">
+                        Register
+                    </a>
+
+                </div>
+
+            </th:block>
+
+            <!-- ================= LOGGED-IN NAVBAR ================= -->
+            <th:block th:if="${session.SPRING_SECURITY_CONTEXT != null
+                and session.SPRING_SECURITY_CONTEXT.authentication.authenticated
+                and session.SPRING_SECURITY_CONTEXT.authentication.principal != 'anonymousUser'}">
+
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="bi bi-house"></i> Home
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/products}">
+                            <i class="bi bi-shop"></i> Products
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/my-orders}">
+                            <i class="bi bi-box-seam"></i> My Orders
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/cart}">
+                            <i class="bi bi-cart3"></i> My Cart
+                        </a>
+                    </li>
+
+                </ul>
+
+                <!-- User Account and Logout -->
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+
+
+					<!-- User Account Profile Dropdown -->
+					<div class="dropdown">
+
+					    <button class="btn btn-success dropdown-toggle"
+					            type="button"
+					            data-bs-toggle="dropdown"
+					            aria-expanded="false">
+
+					        <i class="bi bi-person-circle"></i>
+					        User Account
+					    </button>
+
+					    <div class="dropdown-menu dropdown-menu-end user-profile-menu p-3">
+
+					        <div th:if="${currentUser != null}">
+
+					            <!-- Profile Header -->
+					            <div class="d-flex align-items-center gap-3 mb-3">
+
+					                <div class="profile-avatar">
+					                    <i class="bi bi-person-fill"></i>
+					                </div>
+
+					                <div>
+					                    <h6 class="mb-1 fw-bold"
+					                        th:text="${currentUser.fullName}">
+					                        Customer Name
+					                    </h6>
+
+					                    <small class="text-success">
+					                        <i class="bi bi-patch-check-fill"></i>
+					                        Customer Account
+					                    </small>
+					                </div>
+
+					            </div>
+
+					            <hr>
+
+					            <!-- Email -->
+					            <div class="profile-detail">
+					                <i class="bi bi-envelope"></i>
+					                <div>
+					                    <small>Email Address</small>
+					                    <p th:text="${currentUser.email}">Email</p>
+					                </div>
+					            </div>
+
+					            <!-- Phone -->
+					            <div class="profile-detail">
+					                <i class="bi bi-telephone"></i>
+					                <div>
+					                    <small>Mobile Number</small>
+					                    <p th:text="${currentUser.phone != null
+					                        and !#strings.isEmpty(currentUser.phone)
+					                        ? currentUser.phone : 'Not added'}">
+					                        Phone
+					                    </p>
+					                </div>
+					            </div>
+
+					            <!-- Delivery Address -->
+					            <div class="profile-detail">
+					                <i class="bi bi-geo-alt"></i>
+					                <div>
+					                    <small>Delivery Address</small>
+					                    <p th:text="${currentUser.deliveryAddress != null
+					                        and !#strings.isEmpty(currentUser.deliveryAddress)
+					                        ? currentUser.deliveryAddress : 'Not added yet'}">
+					                        Address
+					                    </p>
+					                </div>
+					            </div>
+
+					            <hr>
+
+					            <a th:href="@{/my-orders}"
+					               class="btn btn-outline-success w-100">
+					                <i class="bi bi-box-seam"></i>
+					                My Orders
+					            </a>
+
+					        </div>
+
+					        <div th:if="${currentUser == null}">
+					            <p class="text-muted mb-0">
+					                User details unavailable.
+					            </p>
+					        </div>
+
+					    </div>
+					</div>
+
+
+                    <!-- Logout POST Form -->
+                    <form th:action="@{/logout}" method="post" class="m-0">
+
+                        <input type="hidden"
+                               th:if="${_csrf != null}"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}">
+
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </th:block>
+
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

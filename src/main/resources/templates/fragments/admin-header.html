@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<th:block th:fragment="adminHeader(pageTitle)">
+
+    <style>
+        .admin-header {
+            background: #ffffff;
+            padding: 22px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .header-left h1 {
+            color: #285c36;
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .header-left p {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .admin-badge {
+            background: #e6f3e8;
+            color: #285c36;
+            padding: 9px 17px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 600px) {
+            .admin-header {
+                padding: 18px;
+            }
+
+            .header-left h1 {
+                font-size: 21px;
+            }
+        }
+    </style>
+
+    <header class="admin-header">
+
+        <div class="header-left">
+            <h1 th:text="${pageTitle}">Admin Dashboard</h1>
+            <p>Welcome to Gavai Swad Administration Panel</p>
+        </div>
+
+        <div class="header-right">
+            <span class="admin-badge">ADMIN</span>
+        </div>
+
+    </header>
+
+</th:block>
+
+</body>
+</html>

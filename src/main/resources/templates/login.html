@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: head(~{::title}, '/css/login.css')}">
+    <title>Login | Gavai Swad</title>
+</head>
+
+<body>
+
+<!-- Common Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="login-page">
+
+    <div class="login-background"></div>
+
+    <div class="login-container">
+
+        <div class="login-brand">
+            <div class="brand-icon">
+                <i class="bi bi-basket2-fill"></i>
+            </div>
+
+            <h1>Gavai Swad</h1>
+            <p>Authentic Taste, Delivered to You</p>
+        </div>
+
+        <div class="login-heading">
+            <span class="welcome-label">WELCOME BACK</span>
+            <h2>Login to Your Account</h2>
+            <p>Enter your details to continue shopping.</p>
+        </div>
+
+        <!-- Error Message -->
+        <div th:if="${param.error}" class="login-message error-message">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            Invalid email or password, or your account is not approved.
+        </div>
+
+        <!-- Logout Message -->
+        <div th:if="${param.logout}" class="login-message success-message">
+            <i class="bi bi-check-circle-fill"></i>
+            You have logged out successfully.
+        </div>
+
+        <!-- Registration Message -->
+        <div th:if="${param.registered}" class="login-message success-message">
+            <i class="bi bi-check-circle-fill"></i>
+            Registration successful! Your account is awaiting admin approval.
+        </div>
+
+        <!-- Login Form -->
+        <form th:action="@{/login}" method="post" class="login-form">
+
+            <div class="login-form-group">
+                <label for="username">Email Address</label>
+
+                <div class="input-wrapper">
+                    <i class="bi bi-envelope"></i>
+
+                    <input type="email"
+                           id="username"
+                           name="username"
+                           placeholder="Enter your email"
+                           autocomplete="username"
+                           required>
+                </div>
+            </div>
+
+            <div class="login-form-group">
+                <label for="password">Password</label>
+
+                <div class="input-wrapper">
+                    <i class="bi bi-lock"></i>
+
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           placeholder="Enter your password"
+                           autocomplete="current-password"
+                           required>
+                </div>
+            </div>
+
+            <button type="submit" class="login-button">
+                Login to Account
+                <i class="bi bi-arrow-right"></i>
+            </button>
+
+        </form>
+
+        <div class="register-link">
+            Don't have an account?
+            <a th:href="@{/register}">Create Account</a>
+        </div>
+
+        <div class="login-security">
+            <i class="bi bi-shield-lock-fill"></i>
+            Your account is protected and secure.
+        </div>
+
+    </div>
+
+</main>
+
+<!-- Common Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Common Scripts -->
+<div th:replace="~{fragments/scripts :: scripts}"></div>
+
+</body>
+</html>

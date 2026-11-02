@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<footer th:fragment="footer" class="bg-dark text-white pt-5 pb-3">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+            <!-- Brand Information -->
+            <div class="col-md-4" id="about">
+                <h3 class="fw-bold">
+                    <span class="text-success">GAVAI</span>
+                    <span class="text-warning">SWAD</span>
+                </h3>
+
+                <p class="text-light mt-3">
+                    Bringing authentic traditional taste and quality
+                    products to your home.
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-md-4">
+                <h5 class="fw-bold mb-3">Quick Links</h5>
+
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a th:href="@{/}" class="text-white text-decoration-none">
+                            Home
+                        </a>
+                    </li>
+
+                    <li class="mb-2">
+                        <a th:href="@{/products}" class="text-white text-decoration-none">
+                            Shop
+                        </a>
+                    </li>
+
+                    <li class="mb-2">
+                        <a href="#about" class="text-white text-decoration-none">
+                            About Us
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div class="col-md-4" id="contact">
+                <h5 class="fw-bold mb-3">Contact Us</h5>
+
+                <p>
+                    <i class="bi bi-envelope"></i>
+                    support@gavaiswad.com
+                </p>
+
+                <p>
+                    <i class="bi bi-geo-alt"></i>
+                    India
+                </p>
+
+                <div class="d-flex gap-3 fs-4">
+                    <a href="#" class="text-white">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+
+                    <a href="#" class="text-white">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+
+                    <a href="#" class="text-white">
+                        <i class="bi bi-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <hr class="border-secondary mt-4">
+
+        <div class="text-center">
+            <p class="mb-0 text-light">
+                &copy; <span th:text="${#dates.year(#dates.createNow())}">2026</span>
+                Gavai Swad. All Rights Reserved.
+            </p>
+        </div>
+
+    </div>
+
+</footer>
+
+</body>
+</html>

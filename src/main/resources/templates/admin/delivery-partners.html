@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Partners | Gavai Swad</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f5f6ef;
+            font-family: 'Segoe UI', sans-serif;
+            color: #244330;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 30px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .page-heading h2 {
+            font-weight: 800;
+            color: #1c5032;
+        }
+
+        .page-heading p {
+            color: #7b887d;
+            margin: 0;
+        }
+
+        .partner-card {
+            background: white;
+            border: 1px solid #e8eadf;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(28, 80, 50, .06);
+            height: 100%;
+        }
+
+        .partner-card h5 {
+            color: #1c5032;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #45594a;
+            font-size: 13px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 11px 13px;
+            border-color: #e0e6dc;
+        }
+
+        .form-control:focus {
+            border-color: #348052;
+            box-shadow: 0 0 0 3px rgba(52, 128, 82, .10);
+        }
+
+        .btn-create {
+            background: linear-gradient(110deg, #1b5735, #348052);
+            border: none;
+            color: white;
+            border-radius: 10px;
+            padding: 11px 18px;
+            font-weight: 700;
+            width: 100%;
+        }
+
+        .btn-create:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(27, 87, 53, .2);
+        }
+
+        .table-card {
+            background: white;
+            border: 1px solid #e8eadf;
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 8px 25px rgba(28, 80, 50, .06);
+        }
+
+        .table thead th {
+            background: #edf3e9;
+            color: #285b39;
+            font-size: 12px;
+            text-transform: uppercase;
+            padding: 14px;
+            white-space: nowrap;
+        }
+
+        .table tbody td {
+            padding: 15px 14px;
+            vertical-align: middle;
+            font-size: 13px;
+        }
+
+        .partner-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #e8f2e8;
+            color: #245b38;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+        }
+
+        .status-approved {
+            background: #e3f4e8;
+            color: #23713b;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-blocked {
+            background: #fde8e8;
+            color: #b42323;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        @media(max-width: 768px) {
+            .admin-layout {
+                flex-direction: column;
+            }
+
+            .main-content {
+                padding: 18px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+    <!-- Admin Sidebar -->
+    <div th:replace="~{fragments/admin-sidebar :: adminSidebar}"></div>
+
+    <main class="main-content">
+
+        <!-- Admin Header -->
+        <div th:replace="~{fragments/admin-header :: adminHeader('Delivery Partners')}"></div>
+
+        <!-- Page Heading -->
+        <div class="page-heading">
+            <div>
+                <h2><i class="bi bi-truck"></i> Delivery Partners</h2>
+                <p>Create and manage your delivery team.</p>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+        <div class="row g-4">
+
+            <!-- Create Partner Form -->
+            <div class="col-lg-4">
+
+                <div class="partner-card">
+
+                    <h5><i class="bi bi-person-plus"></i> Add New Partner</h5>
+
+                    <form th:action="@{/admin/delivery-partners/create}" method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="fullName"
+                                   class="form-control"
+                                   placeholder="Enter full name"
+                                   maxlength="100" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="email"
+                                   class="form-control"
+                                   placeholder="partner@example.com"
+                                   maxlength="150" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mobile Number</label>
+                            <input type="tel" name="phone"
+                                   class="form-control"
+                                   placeholder="Enter mobile number"
+                                   maxlength="15"
+                                   pattern="[0-9+\-\s]{10,15}"
+                                   required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Login Password</label>
+                            <input type="password" name="password"
+                                   class="form-control"
+                                   placeholder="Minimum 8 characters"
+                                   minlength="8" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-create">
+                            <i class="bi bi-person-check"></i>
+                            Create Delivery Partner
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+
+            <!-- Partner List -->
+            <div class="col-lg-8">
+
+                <div class="table-card">
+
+                    <h5 class="fw-bold mb-4">
+                        <i class="bi bi-people"></i>
+                        Delivery Partner List
+                    </h5>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle">
+
+                            <thead>
+                            <tr>
+                                <th>Partner</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            <tr th:each="partner : ${deliveryPartners}">
+
+                                <td>
+                                    <span class="partner-avatar">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    <strong th:text="${partner.fullName}">Name</strong>
+                                </td>
+
+                                <td th:text="${partner.email}">Email</td>
+
+                                <td th:text="${partner.phone}">Phone</td>
+
+                                <td>
+                                    <span th:if="${partner.accountStatus == 'APPROVED'}"
+                                          class="status-approved">Active</span>
+
+                                    <span th:unless="${partner.accountStatus == 'APPROVED'}"
+                                          class="status-blocked"
+                                          th:text="${partner.accountStatus}">Blocked</span>
+                                </td>
+
+                            </tr>
+
+                            <tr th:if="${#lists.isEmpty(deliveryPartners)}">
+                                <td colspan="4" class="text-center text-muted py-5">
+                                    <i class="bi bi-truck fs-2 d-block mb-2"></i>
+                                    No delivery partners added yet.
+                                </td>
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
